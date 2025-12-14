@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英単語ドリル - 中学1年生</title>
+    <meta name="description" content="東京書籍 New Horizon 中学1年生向けの英単語学習アプリ">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">英単語ドリル</h1>
+            <p class="subtitle">中学1年生 - New Horizon</p>
+        </header>
+
+        <main class="quiz-container">
+            <div class="progress-section">
+                <div class="progress-info">
+                    <span class="progress-text">問題 <span id="current-question">1</span> / <span id="total-questions">20</span></span>
+                    <span class="score-text">正解数: <span id="score">0</span></span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="attempts-indicator">
+                    <span class="attempt-dot" id="attempt-1"></span>
+                    <span class="attempt-dot" id="attempt-2"></span>
+                    <span class="attempt-dot" id="attempt-3"></span>
+                </div>
+
+                <div class="question-section">
+                    <label for="answer-input" class="question-label">この日本語を英語にしてください：</label>
+                    <p class="japanese-word" id="japanese-word">読み込み中...</p>
+                </div>
+
+                <div class="answer-section">
+                    <input 
+                        type="text" 
+                        id="answer-input" 
+                        class="answer-input" 
+                        placeholder="英語を入力してください"
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+                    <button id="submit-btn" class="submit-btn">回答する</button>
+                </div>
+
+                <div class="feedback-section" id="feedback-section">
+                    <div class="feedback-message" id="feedback-message"></div>
+                    <div class="correct-answer-display" id="correct-answer-display"></div>
+                </div>
+
+                <button id="next-btn" class="next-btn" style="display: none;">次の問題へ</button>
+            </div>
+
+            <div class="stats-card">
+                <div class="stat-item">
+                    <span class="stat-label">連続正解</span>
+                    <span class="stat-value" id="streak">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">正解率</span>
+                    <span class="stat-value" id="accuracy">0%</span>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <button id="restart-btn" class="restart-btn">最初からやり直す</button>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

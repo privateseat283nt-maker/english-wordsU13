@@ -177,7 +177,7 @@ function loadQuestion() {
     answerInput.value = '';
     answerInput.disabled = false;
     submitBtn.disabled = false;
-    nextBtn.style.display = 'none';
+    nextBtn.classList.add('hidden');
     feedbackMessage.textContent = '';
     feedbackMessage.className = 'feedback-message';
     correctAnswerDisplay.textContent = '';
@@ -233,7 +233,7 @@ function handleCorrectAnswer() {
     submitBtn.disabled = true;
 
     // Show next button
-    nextBtn.style.display = 'block';
+    nextBtn.classList.remove('hidden');
 
     // Update stats
     updateStats();
@@ -269,7 +269,7 @@ function handleIncorrectAnswer() {
         submitBtn.disabled = true;
 
         // Show next button
-        nextBtn.style.display = 'block';
+        nextBtn.classList.remove('hidden');
 
         // Update stats
         updateStats();
@@ -312,7 +312,7 @@ function showFinalResults() {
     japaneseWordEl.textContent = '完了！';
     answerInput.style.display = 'none';
     submitBtn.style.display = 'none';
-    nextBtn.style.display = 'none';
+    nextBtn.classList.add('hidden');
 
     feedbackMessage.textContent = `お疲れ様でした！`;
     feedbackMessage.className = 'feedback-message correct';

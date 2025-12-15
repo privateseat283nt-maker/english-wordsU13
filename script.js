@@ -168,78 +168,47 @@ function playIncorrectSound() {
     }
 }
 
-// ===== Speech Synthesis for Pronunciation =====
-let voicesLoaded = false;
-
-// Preload voices for mobile compatibility
-function loadVoices() {
-    return new Promise((resolve) => {
-        const voices = window.speechSynthesis.getVoices();
-        if (voices.length > 0) {
-            voicesLoaded = true;
-            console.log('Voices loaded:', voices.length);
-            resolve(voices);
-        } else {
-            window.speechSynthesis.addEventListener('voiceschanged', () => {
-                const loadedVoices = window.speechSynthesis.getVoices();
-                voicesLoaded = true;
-                console.log('Voices loaded after event:', loadedVoices.length);
-                resolve(loadedVoices);
-            }, { once: true });
-
-            // Trigger voice loading on some browsers
-            window.speechSynthesis.getVoices();
-        }
-    });
-}
-
+// ===== Audio-based Pronunciation (Google Translate TTS) =====
+// More reliable than Speech Synthesis API on mobile devices
 function speakWord(word) {
     console.log('speakWord called with:', word);
 
     try {
-        // Cancel any ongoing speech
-        window.speechSynthesis.cancel();
+        // Create audio element for pronunciation
+        const audio = new Audio();
 
-        // Small delay to ensure cancel completes (important for mobile)
-        setTimeout(() => {
-            try {
-                const utterance = new SpeechSynthesisUtterance(word);
-                utterance.lang = 'en-US';
-                utterance.rate = 0.7; // Slow down for beginners
-                utterance.pitch = 1.0;
-                utterance.volume = 1.0;
+        // Use Google Translate TTS API (free and reliable)
+        // This works on all mobile browsers
+        const encodedWord = encodeURIComponent(word);
+        audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q=${encodedWord}`;
 
-                // Event handlers for debugging
-                utterance.onstart = () => {
-                    console.log('Speech started:', word);
-                };
+        // Event handlers for debugging
+        audio.onloadeddata = () => {
+            console.log('Audio loaded for word:', word);
+        };
 
-                utterance.onend = () => {
-                    console.log('Speech ended:', word);
-                };
+        audio.onplay = () => {
+            console.log('Audio started playing:', word);
+        };
 
-                utterance.onerror = (event) => {
-                    console.error('Speech error:', event.error, event);
-                };
+        audio.onended = () => {
+            console.log('Audio finished playing:', word);
+        };
 
-                // Try to select an English voice explicitly
-                const voices = window.speechSynthesis.getVoices();
-                const englishVoice = voices.find(voice => voice.lang.startsWith('en'));
-                if (englishVoice) {
-                    utterance.voice = englishVoice;
-                    console.log('Using voice:', englishVoice.name);
-                }
+        audio.onerror = (event) => {
+            console.error('Audio playback error:', event);
+            console.error('Error details:', audio.error);
+        };
 
-                console.log('Calling speechSynthesis.speak()');
-                window.speechSynthesis.speak(utterance);
-
-            } catch (innerError) {
-                console.error('Error in delayed speak:', innerError);
-            }
-        }, 100); // 100ms delay for mobile compatibility
+        // Play the audio
+        audio.play().then(() => {
+            console.log('Audio play() promise resolved');
+        }).catch(error => {
+            console.error('Audio play() failed:', error);
+        });
 
     } catch (error) {
-        console.error('Failed to speak word:', error);
+        console.error('Failed to play pronunciation:', error);
     }
 }
 
@@ -257,11 +226,6 @@ function initGame() {
     // Update UI
     totalQuestionsEl.textContent = shuffledVocabulary.length;
     updateStats();
-
-    // Preload voices for Speech Synthesis (important for mobile)
-    loadVoices().then(() => {
-        console.log('Voices ready for use');
-    });
 
     // Load first question
     loadQuestion();
@@ -454,24 +418,9 @@ restartBtn.addEventListener('click', () => {
 });
 
 
+
 // ===== Initialize on Load =====
 window.addEventListener('load', () => {
     // Initialize game
     initGame();
-
-    // Initialize Speech Synthesis on first user interaction (required for mobile)
-    const initSpeechOnInteraction = () => {
-        console.log('User interaction detected, initializing Speech Synthesis');
-        loadVoices().then(() => {
-            console.log('Speech Synthesis ready after user interaction');
-        });
-
-        // Remove listeners after first interaction
-        document.removeEventListener('click', initSpeechOnInteraction);
-        document.removeEventListener('touchstart', initSpeechOnInteraction);
-    };
-
-    // Listen for first user interaction
-    document.addEventListener('click', initSpeechOnInteraction, { once: true });
-    document.addEventListener('touchstart', initSpeechOnInteraction, { once: true });
 });

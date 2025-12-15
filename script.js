@@ -1,33 +1,68 @@
 // ===== Vocabulary Data (Tokyo Shoseki New Horizon 1) =====
 const vocabulary = [
+    // Basic Greetings & Expressions
     { japanese: "こんにちは", english: "hello" },
-    { japanese: "ありがとう", english: "thank you" },
+    { japanese: "おはよう", english: "good morning" },
+    { japanese: "こんばんは", english: "good evening" },
     { japanese: "さようなら", english: "goodbye" },
+    { japanese: "ありがとう", english: "thank you" },
+    { japanese: "すみません", english: "excuse me" },
+    { japanese: "ごめんなさい", english: "sorry" },
     { japanese: "はい", english: "yes" },
     { japanese: "いいえ", english: "no" },
+    { japanese: "お願いします", english: "please" },
+
+    // Pronouns
     { japanese: "私", english: "I" },
     { japanese: "あなた", english: "you" },
     { japanese: "彼", english: "he" },
     { japanese: "彼女", english: "she" },
+    { japanese: "私たち", english: "we" },
+    { japanese: "彼ら", english: "they" },
     { japanese: "これ", english: "this" },
     { japanese: "それ", english: "that" },
-    { japanese: "本", english: "book" },
-    { japanese: "ペン", english: "pen" },
+    { japanese: "あれ", english: "that" },
+    { japanese: "誰", english: "who" },
+    { japanese: "何", english: "what" },
+    { japanese: "どこ", english: "where" },
+    { japanese: "いつ", english: "when" },
+    { japanese: "なぜ", english: "why" },
+    { japanese: "どのように", english: "how" },
+
+    // School & Study
     { japanese: "学校", english: "school" },
     { japanese: "先生", english: "teacher" },
     { japanese: "生徒", english: "student" },
+    { japanese: "クラス", english: "class" },
+    { japanese: "教室", english: "classroom" },
+    { japanese: "本", english: "book" },
+    { japanese: "ペン", english: "pen" },
+    { japanese: "鉛筆", english: "pencil" },
+    { japanese: "ノート", english: "notebook" },
+    { japanese: "机", english: "desk" },
+    { japanese: "椅子", english: "chair" },
+    { japanese: "黒板", english: "blackboard" },
+    { japanese: "宿題", english: "homework" },
+    { japanese: "テスト", english: "test" },
+    { japanese: "勉強", english: "study" },
+
+    // Family
+    { japanese: "家族", english: "family" },
+    { japanese: "父", english: "father" },
+    { japanese: "母", english: "mother" },
+    { japanese: "兄", english: "brother" },
+    { japanese: "姉", english: "sister" },
+    { japanese: "祖父", english: "grandfather" },
+    { japanese: "祖母", english: "grandmother" },
     { japanese: "友達", english: "friend" },
+
+    // Animals
     { japanese: "犬", english: "dog" },
     { japanese: "猫", english: "cat" },
-    { japanese: "好き", english: "like" },
-    { japanese: "名前", english: "name" },
-    { japanese: "時間", english: "time" },
-    { japanese: "今日", english: "today" },
-    { japanese: "明日", english: "tomorrow" },
-    { japanese: "昨日", english: "yesterday" },
-    { japanese: "朝", english: "morning" },
-    { japanese: "午後", english: "afternoon" },
-    { japanese: "夜", english: "night" },
+    { japanese: "鳥", english: "bird" },
+    { japanese: "魚", english: "fish" },
+
+    // Common Verbs
     { japanese: "食べる", english: "eat" },
     { japanese: "飲む", english: "drink" },
     { japanese: "行く", english: "go" },
@@ -37,18 +72,58 @@ const vocabulary = [
     { japanese: "話す", english: "speak" },
     { japanese: "読む", english: "read" },
     { japanese: "書く", english: "write" },
+    { japanese: "走る", english: "run" },
+    { japanese: "歩く", english: "walk" },
+    { japanese: "座る", english: "sit" },
+    { japanese: "立つ", english: "stand" },
+    { japanese: "寝る", english: "sleep" },
+    { japanese: "起きる", english: "wake up" },
+    { japanese: "作る", english: "make" },
+    { japanese: "買う", english: "buy" },
+    { japanese: "売る", english: "sell" },
+    { japanese: "持つ", english: "have" },
+    { japanese: "使う", english: "use" },
+    { japanese: "好き", english: "like" },
+    { japanese: "愛する", english: "love" },
+    { japanese: "知る", english: "know" },
+    { japanese: "考える", english: "think" },
+    { japanese: "遊ぶ", english: "play" },
+    { japanese: "働く", english: "work" },
+    { japanese: "住む", english: "live" },
+    { japanese: "会う", english: "meet" },
+
+    // Adjectives
     { japanese: "大きい", english: "big" },
     { japanese: "小さい", english: "small" },
     { japanese: "新しい", english: "new" },
     { japanese: "古い", english: "old" },
     { japanese: "良い", english: "good" },
     { japanese: "悪い", english: "bad" },
+    { japanese: "高い", english: "tall" },
+    { japanese: "低い", english: "short" },
+    { japanese: "長い", english: "long" },
+    { japanese: "短い", english: "short" },
+    { japanese: "速い", english: "fast" },
+    { japanese: "遅い", english: "slow" },
+    { japanese: "暑い", english: "hot" },
+    { japanese: "寒い", english: "cold" },
+    { japanese: "美しい", english: "beautiful" },
+    { japanese: "楽しい", english: "fun" },
+    { japanese: "難しい", english: "difficult" },
+    { japanese: "易しい", english: "easy" },
+    { japanese: "忙しい", english: "busy" },
+
+    // Colors
     { japanese: "赤", english: "red" },
     { japanese: "青", english: "blue" },
     { japanese: "黄色", english: "yellow" },
     { japanese: "緑", english: "green" },
     { japanese: "白", english: "white" },
     { japanese: "黒", english: "black" },
+    { japanese: "茶色", english: "brown" },
+    { japanese: "ピンク", english: "pink" },
+
+    // Numbers
     { japanese: "一", english: "one" },
     { japanese: "二", english: "two" },
     { japanese: "三", english: "three" },
@@ -59,6 +134,58 @@ const vocabulary = [
     { japanese: "八", english: "eight" },
     { japanese: "九", english: "nine" },
     { japanese: "十", english: "ten" },
+
+    // Time
+    { japanese: "時間", english: "time" },
+    { japanese: "今日", english: "today" },
+    { japanese: "明日", english: "tomorrow" },
+    { japanese: "昨日", english: "yesterday" },
+    { japanese: "朝", english: "morning" },
+    { japanese: "午後", english: "afternoon" },
+    { japanese: "夜", english: "night" },
+    { japanese: "週", english: "week" },
+    { japanese: "月", english: "month" },
+    { japanese: "年", english: "year" },
+
+    // Places
+    { japanese: "家", english: "home" },
+    { japanese: "部屋", english: "room" },
+    { japanese: "公園", english: "park" },
+    { japanese: "店", english: "store" },
+    { japanese: "病院", english: "hospital" },
+    { japanese: "駅", english: "station" },
+    { japanese: "図書館", english: "library" },
+
+    // Food & Drink
+    { japanese: "食べ物", english: "food" },
+    { japanese: "水", english: "water" },
+    { japanese: "お茶", english: "tea" },
+    { japanese: "牛乳", english: "milk" },
+    { japanese: "パン", english: "bread" },
+    { japanese: "米", english: "rice" },
+    { japanese: "肉", english: "meat" },
+    { japanese: "野菜", english: "vegetable" },
+    { japanese: "果物", english: "fruit" },
+
+    // Common Nouns
+    { japanese: "名前", english: "name" },
+    { japanese: "人", english: "person" },
+    { japanese: "子供", english: "child" },
+    { japanese: "男", english: "man" },
+    { japanese: "女", english: "woman" },
+    { japanese: "国", english: "country" },
+    { japanese: "町", english: "town" },
+    { japanese: "車", english: "car" },
+    { japanese: "自転車", english: "bicycle" },
+    { japanese: "電車", english: "train" },
+    { japanese: "バス", english: "bus" },
+    { japanese: "音楽", english: "music" },
+    { japanese: "スポーツ", english: "sport" },
+    { japanese: "映画", english: "movie" },
+    { japanese: "写真", english: "picture" },
+    { japanese: "手紙", english: "letter" },
+    { japanese: "電話", english: "phone" },
+    { japanese: "コンピューター", english: "computer" },
 ];
 
 // ===== Game State =====
@@ -243,8 +370,9 @@ function speakWord(word) {
 
 // ===== Initialize Game =====
 function initGame() {
-    // Shuffle vocabulary
-    shuffledVocabulary = [...vocabulary].sort(() => Math.random() - 0.5);
+    // Shuffle all vocabulary and select 10 random questions
+    const allVocabulary = [...vocabulary].sort(() => Math.random() - 0.5);
+    shuffledVocabulary = allVocabulary.slice(0, 10); // Take first 10 after shuffle
 
     // Reset state
     currentQuestionIndex = 0;

@@ -246,13 +246,16 @@ body::before {
 .answer-input {
     flex: 1;
     padding: var(--spacing-md);
-    font-size: 1.1rem;
+    font-size: 16px;
+    /* Prevent zoom on iOS */
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-md);
     color: var(--text-primary);
     font-family: 'Inter', sans-serif;
     transition: all var(--transition-fast);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 .answer-input:focus {
@@ -278,6 +281,8 @@ body::before {
     transition: all var(--transition-fast);
     box-shadow: var(--shadow-md);
     white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 .submit-btn:hover {
@@ -363,10 +368,12 @@ body::before {
     transition: all var(--transition-fast);
     box-shadow: var(--shadow-md);
     animation: fadeIn 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 .next-btn.hidden {
-    display: none;
+    display: none !important;
 }
 
 .next-btn:hover {

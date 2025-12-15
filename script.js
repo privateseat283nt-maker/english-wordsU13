@@ -91,56 +91,108 @@ const attemptDots = [
 ];
 
 // ===== Audio Context for Sound Effects =====
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+let audioContext = null;
+
+// Initialize AudioContext on first user interaction (required for mobile)
+function initAudioContext() {
+    if (!audioContext) {
+        try {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            console.log('AudioContext initialized');
+        } catch (error) {
+            console.error('Failed to initialize AudioContext:', error);
+        }
+    }
+
+    // Resume AudioContext if it's suspended (common on mobile)
+    if (audioContext && audioContext.state === 'suspended') {
+        audioContext.resume().then(() => {
+            console.log('AudioContext resumed');
+        }).catch(error => {
+            console.error('Failed to resume AudioContext:', error);
+        });
+    }
+}
 
 // ===== Sound Effect Functions =====
 function playCorrectSound() {
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
+    if (!audioContext) {
+        console.warn('AudioContext not initialized');
+        return;
+    }
 
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
+    try {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
 
-    oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
-    oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
-    oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
 
-    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+        oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+        oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
+        oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
 
-    oscillator.start(audioContext.currentTime);
-    oscillator.stop(audioContext.currentTime + 0.5);
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+    } catch (error) {
+        console.error('Failed to play correct sound:', error);
+    }
 }
 
 function playIncorrectSound() {
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
+    if (!audioContext) {
+        console.warn('AudioContext not initialized');
+        return;
+    }
 
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
+    try {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
 
-    oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
-    oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.3);
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
 
-    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+        oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.3);
 
-    oscillator.start(audioContext.currentTime);
-    oscillator.stop(audioContext.currentTime + 0.3);
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.3);
+    } catch (error) {
+        console.error('Failed to play incorrect sound:', error);
+    }
 }
 
 // ===== Speech Synthesis for Pronunciation =====
 function speakWord(word) {
-    // Cancel any ongoing speech
-    window.speechSynthesis.cancel();
+    try {
+        // Cancel any ongoing speech
+        window.speechSynthesis.cancel();
 
-    const utterance = new SpeechSynthesisUtterance(word);
-    utterance.lang = 'en-US';
-    utterance.rate = 0.7; // Slow down for beginners
-    utterance.pitch = 1.0;
-    utterance.volume = 1.0;
+        const utterance = new SpeechSynthesisUtterance(word);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.7; // Slow down for beginners
+        utterance.pitch = 1.0;
+        utterance.volume = 1.0;
 
-    window.speechSynthesis.speak(utterance);
+        // For mobile compatibility: wait for voices to load
+        if (window.speechSynthesis.getVoices().length === 0) {
+            window.speechSynthesis.addEventListener('voiceschanged', () => {
+                window.speechSynthesis.speak(utterance);
+            }, { once: true });
+        } else {
+            window.speechSynthesis.speak(utterance);
+        }
+
+        console.log('Speaking word:', word);
+    } catch (error) {
+        console.error('Failed to speak word:', error);
+    }
 }
 
 // ===== Initialize Game =====
@@ -196,6 +248,9 @@ function loadQuestion() {
 
 // ===== Check Answer =====
 function checkAnswer() {
+    // Initialize AudioContext on first interaction (required for mobile)
+    initAudioContext();
+
     const userAnswer = answerInput.value.trim().toLowerCase();
     const correctAnswer = currentWord.english.toLowerCase();
 
@@ -234,6 +289,7 @@ function handleCorrectAnswer() {
 
     // Show next button
     nextBtn.classList.remove('hidden');
+    console.log('Next button should be visible now, classList:', nextBtn.classList.toString());
 
     // Update stats
     updateStats();
@@ -270,6 +326,7 @@ function handleIncorrectAnswer() {
 
         // Show next button
         nextBtn.classList.remove('hidden');
+        console.log('Next button should be visible (after 3 attempts), classList:', nextBtn.classList.toString());
 
         // Update stats
         updateStats();

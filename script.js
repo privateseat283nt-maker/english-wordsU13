@@ -169,27 +169,75 @@ function playIncorrectSound() {
 }
 
 // ===== Speech Synthesis for Pronunciation =====
+let voicesLoaded = false;
+
+// Preload voices for mobile compatibility
+function loadVoices() {
+    return new Promise((resolve) => {
+        const voices = window.speechSynthesis.getVoices();
+        if (voices.length > 0) {
+            voicesLoaded = true;
+            console.log('Voices loaded:', voices.length);
+            resolve(voices);
+        } else {
+            window.speechSynthesis.addEventListener('voiceschanged', () => {
+                const loadedVoices = window.speechSynthesis.getVoices();
+                voicesLoaded = true;
+                console.log('Voices loaded after event:', loadedVoices.length);
+                resolve(loadedVoices);
+            }, { once: true });
+
+            // Trigger voice loading on some browsers
+            window.speechSynthesis.getVoices();
+        }
+    });
+}
+
 function speakWord(word) {
+    console.log('speakWord called with:', word);
+
     try {
         // Cancel any ongoing speech
         window.speechSynthesis.cancel();
 
-        const utterance = new SpeechSynthesisUtterance(word);
-        utterance.lang = 'en-US';
-        utterance.rate = 0.7; // Slow down for beginners
-        utterance.pitch = 1.0;
-        utterance.volume = 1.0;
+        // Small delay to ensure cancel completes (important for mobile)
+        setTimeout(() => {
+            try {
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.7; // Slow down for beginners
+                utterance.pitch = 1.0;
+                utterance.volume = 1.0;
 
-        // For mobile compatibility: wait for voices to load
-        if (window.speechSynthesis.getVoices().length === 0) {
-            window.speechSynthesis.addEventListener('voiceschanged', () => {
+                // Event handlers for debugging
+                utterance.onstart = () => {
+                    console.log('Speech started:', word);
+                };
+
+                utterance.onend = () => {
+                    console.log('Speech ended:', word);
+                };
+
+                utterance.onerror = (event) => {
+                    console.error('Speech error:', event.error, event);
+                };
+
+                // Try to select an English voice explicitly
+                const voices = window.speechSynthesis.getVoices();
+                const englishVoice = voices.find(voice => voice.lang.startsWith('en'));
+                if (englishVoice) {
+                    utterance.voice = englishVoice;
+                    console.log('Using voice:', englishVoice.name);
+                }
+
+                console.log('Calling speechSynthesis.speak()');
                 window.speechSynthesis.speak(utterance);
-            }, { once: true });
-        } else {
-            window.speechSynthesis.speak(utterance);
-        }
 
-        console.log('Speaking word:', word);
+            } catch (innerError) {
+                console.error('Error in delayed speak:', innerError);
+            }
+        }, 100); // 100ms delay for mobile compatibility
+
     } catch (error) {
         console.error('Failed to speak word:', error);
     }
@@ -209,6 +257,11 @@ function initGame() {
     // Update UI
     totalQuestionsEl.textContent = shuffledVocabulary.length;
     updateStats();
+
+    // Preload voices for Speech Synthesis (important for mobile)
+    loadVoices().then(() => {
+        console.log('Voices ready for use');
+    });
 
     // Load first question
     loadQuestion();
@@ -400,7 +453,25 @@ restartBtn.addEventListener('click', () => {
     initGame();
 });
 
+
 // ===== Initialize on Load =====
 window.addEventListener('load', () => {
+    // Initialize game
     initGame();
+
+    // Initialize Speech Synthesis on first user interaction (required for mobile)
+    const initSpeechOnInteraction = () => {
+        console.log('User interaction detected, initializing Speech Synthesis');
+        loadVoices().then(() => {
+            console.log('Speech Synthesis ready after user interaction');
+        });
+
+        // Remove listeners after first interaction
+        document.removeEventListener('click', initSpeechOnInteraction);
+        document.removeEventListener('touchstart', initSpeechOnInteraction);
+    };
+
+    // Listen for first user interaction
+    document.addEventListener('click', initSpeechOnInteraction, { once: true });
+    document.addEventListener('touchstart', initSpeechOnInteraction, { once: true });
 });

@@ -168,47 +168,76 @@ function playIncorrectSound() {
     }
 }
 
-// ===== Audio-based Pronunciation (Google Translate TTS) =====
-// More reliable than Speech Synthesis API on mobile devices
+// ===== Speech Synthesis for Pronunciation =====
+// Using Speech Synthesis API with mobile-friendly implementation
 function speakWord(word) {
     console.log('speakWord called with:', word);
 
     try {
-        // Create audio element for pronunciation
-        const audio = new Audio();
+        // Ensure speech synthesis is available
+        if (!window.speechSynthesis) {
+            console.error('Speech Synthesis not supported');
+            return;
+        }
 
-        // Use Google Translate TTS API (free and reliable)
-        // This works on all mobile browsers
-        const encodedWord = encodeURIComponent(word);
-        audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q=${encodedWord}`;
+        // Cancel any ongoing speech
+        window.speechSynthesis.cancel();
 
-        // Event handlers for debugging
-        audio.onloadeddata = () => {
-            console.log('Audio loaded for word:', word);
+        // Create utterance
+        const utterance = new SpeechSynthesisUtterance(word);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.8;
+        utterance.pitch = 1.0;
+        utterance.volume = 1.0;
+
+        // Event handlers
+        utterance.onstart = () => {
+            console.log('Speech started:', word);
         };
 
-        audio.onplay = () => {
-            console.log('Audio started playing:', word);
+        utterance.onend = () => {
+            console.log('Speech ended:', word);
         };
 
-        audio.onended = () => {
-            console.log('Audio finished playing:', word);
+        utterance.onerror = (event) => {
+            console.error('Speech error:', event.error);
+            if (event.error === 'not-allowed') {
+                console.error('Speech not allowed - user interaction may be required');
+            }
         };
 
-        audio.onerror = (event) => {
-            console.error('Audio playback error:', event);
-            console.error('Error details:', audio.error);
-        };
+        // Get voices and select English voice
+        const voices = window.speechSynthesis.getVoices();
+        console.log('Available voices:', voices.length);
 
-        // Play the audio
-        audio.play().then(() => {
-            console.log('Audio play() promise resolved');
-        }).catch(error => {
-            console.error('Audio play() failed:', error);
-        });
+        if (voices.length > 0) {
+            // Try to find a good English voice (avoid Google voices as they may cause 404)
+            const englishVoice = voices.find(v =>
+                v.lang.startsWith('en') && !v.name.includes('Google')
+            ) || voices.find(v => v.lang.startsWith('en'));
+
+            if (englishVoice) {
+                utterance.voice = englishVoice;
+                console.log('Using voice:', englishVoice.name, englishVoice.lang);
+            }
+        }
+
+        // Small delay to ensure cancel completes
+        setTimeout(() => {
+            console.log('Calling speechSynthesis.speak()');
+            window.speechSynthesis.speak(utterance);
+
+            // Force resume if paused (iOS Safari fix)
+            setTimeout(() => {
+                if (window.speechSynthesis.paused) {
+                    console.log('Speech was paused, resuming...');
+                    window.speechSynthesis.resume();
+                }
+            }, 100);
+        }, 100);
 
     } catch (error) {
-        console.error('Failed to play pronunciation:', error);
+        console.error('Failed to speak word:', error);
     }
 }
 

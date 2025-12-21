@@ -1,4 +1,4 @@
-﻿// ===== Vocabulary Data (Tokyo Shoseki New Horizon 1 - 448 words) =====
+// ===== Vocabulary Data (Tokyo Shoseki New Horizon 1 - 448 words) =====
 const vocabulary = [
     { japanese: "1つの", english: "a" },
     { japanese: "できる，有能な", english: "able" },
@@ -458,10 +458,10 @@ let shuffledVocabulary = [];
 let incorrectCount = 0;
 
 // ===== DOM Elements =====
-const wordEl = document.getElementById('word');
+const wordEl = document.getElementById('japanese-word');
 const answerInput = document.getElementById('answer-input');
 const submitBtn = document.getElementById('submit-btn');
-const feedbackEl = document.getElementById('feedback');
+const feedbackEl = document.getElementById('feedback-message');
 const nextBtn = document.getElementById('next-btn');
 const restartBtn = document.getElementById('restart-btn');
 const currentQuestionEl = document.getElementById('current-question');
@@ -637,7 +637,7 @@ function loadQuestion() {
     answerInput.disabled = false;
     submitBtn.disabled = false;
     feedbackEl.textContent = '';
-    feedbackEl.className = 'feedback';
+    feedbackEl.className = 'feedback-message';
     nextBtn.classList.add('hidden');
 
     currentQuestionEl.textContent = currentQuestionIndex + 1;
@@ -683,7 +683,7 @@ function handleCorrectAnswer() {
     speakWord(currentWord.english);
 
     feedbackEl.textContent = `✓ 正解！ "${currentWord.english}"`;
-    feedbackEl.className = 'feedback correct';
+    feedbackEl.className = 'feedback-message correct';
 
     answerInput.disabled = true;
     submitBtn.disabled = true;
@@ -706,7 +706,7 @@ function handleIncorrectAnswer() {
         totalAnswered++;
 
         feedbackEl.textContent = `✗ 不正解。正解は "${currentWord.english}" です。`;
-        feedbackEl.className = 'feedback incorrect';
+        feedbackEl.className = 'feedback-message incorrect';
 
         speakWord(currentWord.english);
 
@@ -720,7 +720,7 @@ function handleIncorrectAnswer() {
         updateStats();
     } else {
         feedbackEl.textContent = `✗ 不正解。もう一度試してください。(${incorrectCount}/3)`;
-        feedbackEl.className = 'feedback incorrect';
+        feedbackEl.className = 'feedback-message incorrect';
         answerInput.value = '';
         answerInput.focus();
     }
@@ -742,7 +742,7 @@ function showResults() {
 
     const accuracy = totalAnswered > 0 ? Math.round((score / totalAnswered) * 100) : 100;
     feedbackEl.textContent = `お疲れ様でした！スコア: ${score}/${totalAnswered} (${accuracy}%)`;
-    feedbackEl.className = 'feedback';
+    feedbackEl.className = 'feedback-message';
 }
 
 // ===== Event Listeners =====

@@ -237,7 +237,7 @@ const vocabulary = [
     { japanese: "動く，感動させる", english: "move" },
     { japanese: "(男性)～さん", english: "Mr. ～" },
     { japanese: "(女性)～さん", english: "Ms. ～" },
-    { japanese: "ずっと，たいへん", english: "much" },
+    { japanese: "たくさん、多く、非常に（量が多いことや程度が高いこと）", english: "much" },
     { japanese: "音楽", english: "music" },
     { japanese: "私の", english: "my" },
     { japanese: "私自身を", english: "myself" },
